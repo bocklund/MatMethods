@@ -22,7 +22,7 @@ from atomate.pwscf.firetasks.write_inputs import WritePwscfFromInput
 # TODO: add a PwscfToDb task
 class PwscfFW(Firework):
     def __init__(self, structure, pseudo_dir=None, name='PWscf run', pwscf_input_set=None,
-                 pwscf_cmd="pw.x -i *.in", override_default_pwscf_params=None,
+                 pwscf_cmd="pw.x -i *.in", override_default_pwscf_params=None, db_file=None,
                  parents=None, **kwargs):
         """
         Optimize the given structure.
@@ -46,7 +46,7 @@ class PwscfFW(Firework):
 
         t = []
         t.append(WritePwscfFromInput(structure=structure, pseudo_dir=pseudo_dir, pwscf_input_set=pwscf_input_set))
-        t.append(RunPwscfDirect(vasp_cmd=pwscf_cmd))
+        t.append(RunPwscfDirect(pwscf_cmd=pwscf_cmd))
         t.append(PassCalcLocs(name=name))
         super(PwscfFW, self).__init__(t, parents=parents, name="{}-{}".format(structure.composition.reduced_formula, name), **kwargs)
 
